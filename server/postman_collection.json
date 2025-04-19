@@ -1,0 +1,188 @@
+{
+    "info": {
+        "_postman_id": "6a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d",
+        "name": "Dreams Property API",
+        "description": "Collection for testing the Dreams Property API endpoints",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get All Properties",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:5000/api/properties",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "api",
+                        "properties"
+                    ]
+                },
+                "description": "Retrieve all properties"
+            },
+            "response": []
+        },
+        {
+            "name": "Get Property by ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:5000/api/properties/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "api",
+                        "properties",
+                        "1"
+                    ]
+                },
+                "description": "Retrieve a specific property by ID"
+            },
+            "response": []
+        },
+        {
+            "name": "Create Property",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"title\": \"Modern Apartment\",\n  \"description\": \"A beautiful modern apartment with stunning views of the city skyline.\",\n  \"price\": 350000,\n  \"location\": \"Downtown, City Center\",\n  \"bedrooms\": 2,\n  \"bathrooms\": 2,\n  \"area\": 1200,\n  \"imageUrl\": \"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267\",\n  \"amenities\": [\"Parking\", \"Gym\", \"Swimming Pool\"],\n  \"contactEmail\": \"contact@example.com\",\n  \"contactPhone\": \"+1 (555) 123-4567\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:5000/api/properties",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "api",
+                        "properties"
+                    ]
+                },
+                "description": "Create a new property"
+            },
+            "response": []
+        },
+        {
+            "name": "Update Property",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"title\": \"Updated Modern Apartment\",\n  \"description\": \"A beautiful modern apartment with stunning views of the city skyline and park.\",\n  \"price\": 375000,\n  \"location\": \"Downtown, City Center\",\n  \"bedrooms\": 2,\n  \"bathrooms\": 2,\n  \"area\": 1200,\n  \"imageUrl\": \"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267\",\n  \"amenities\": [\"Parking\", \"Gym\", \"Swimming Pool\", \"Security\"],\n  \"contactEmail\": \"contact@example.com\",\n  \"contactPhone\": \"+1 (555) 123-4567\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:5000/api/properties/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "api",
+                        "properties",
+                        "1"
+                    ]
+                },
+                "description": "Update an existing property"
+            },
+            "response": []
+        },
+        {
+            "name": "Delete Property",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:5000/api/properties/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "api",
+                        "properties",
+                        "1"
+                    ]
+                },
+                "description": "Delete a property by ID"
+            },
+            "response": []
+        },
+        {
+            "name": "Create Property (Invalid Data)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"title\": \"M\",\n  \"description\": \"Too short\",\n  \"price\": -100,\n  \"location\": \"Downtown\",\n  \"bedrooms\": -1,\n  \"bathrooms\": -0.5,\n  \"area\": -200,\n  \"imageUrl\": \"not-a-valid-url\",\n  \"amenities\": [],\n  \"contactEmail\": \"invalid-email\",\n  \"contactPhone\": \"+1 (555) 123-4567\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:5000/api/properties",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "api",
+                        "properties"
+                    ]
+                },
+                "description": "Attempt to create a property with invalid data (should return validation error)"
+            },
+            "response": []
+        },
+        {
+            "name": "Get Non-existent Property",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:5000/api/properties/999",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "api",
+                        "properties",
+                        "999"
+                    ]
+                },
+                "description": "Attempt to retrieve a property that doesn't exist (should return 404)"
+            },
+            "response": []
+        }
+    ]
+}

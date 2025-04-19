@@ -1,0 +1,21 @@
+{
+    "name": "dreams-property-server",
+    "version": "1.0.0",
+    "description": "Backend for Dreams Property listings website",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "dev": "nodemon src/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "express": "^4.21.2",
+        "joi": "^17.13.3",
+        "mysql2": "^3.14.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.22"
+    }
+}
