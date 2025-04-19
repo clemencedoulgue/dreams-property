@@ -1,31 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import HomeIcon from '@mui/icons-material/Home';
+import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
 
 const Header: React.FC = () => {
     return (
         <AppBar position="static">
-            <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    <Link to="/" className="text-white flex items-center">
-                        <HomeIcon sx={{ mr: 1 }} />
+            <Container>
+                <Toolbar>
+                    <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'white' }}>
                         Dreams Property
-                    </Link>
-                </Typography>
-                <Box>
+                    </Typography>
                     <Button color="inherit" component={Link} to="/">
                         Home
                     </Button>
                     <Button color="inherit" component={Link} to="/add-property">
                         Add Property
                     </Button>
-                </Box>
-            </Toolbar>
+                </Toolbar>
+            </Container>
         </AppBar>
     );
 };

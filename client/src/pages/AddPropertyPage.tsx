@@ -34,120 +34,135 @@ interface FormErrors {
     [key: string]: string;
 }
 
+const initialFormState: FormData = {
+    title: '',
+    description: '',
+    price: '',
+    location: '',
+    bedrooms: '',
+    bathrooms: '',
+    area: '',
+    imageUrl: '',
+    amenities: '',
+    contactEmail: '',
+    contactPhone: ''
+};
+
 const AddPropertyPage: React.FC = () => {
     const navigate = useNavigate();
-    const [formSubmitted, setFormSubmitted] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
-    const [submitError, setSubmitError] = useState<string | null>(null);
-    const [formData, setFormData] = useState<FormData>({
-        title: '',
-        description: '',
-        price: '',
-        location: '',
-        bedrooms: '',
-        bathrooms: '',
-        area: '',
-        imageUrl: '',
-        amenities: '',
-        contactEmail: '',
-        contactPhone: ''
-    });
-
+    const [formData, setFormData] = useState<FormData>(initialFormState);
     const [errors, setErrors] = useState<FormErrors>({});
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-
-        // Clear error when user types
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: ''
-            });
-        }
-    };
+    const [loading, setLoading] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
 
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
+        let isValid = true;
 
         // Required fields
-        if (!formData.title.trim()) newErrors.title = 'Title is required';
-        if (!formData.description.trim()) newErrors.description = 'Description is required';
-        if (!formData.location.trim()) newErrors.location = 'Location is required';
-        if (!formData.contactEmail.trim()) newErrors.contactEmail = 'Email is required';
-
-        // Price validation
-        if (!formData.price.trim()) {
-            newErrors.price = 'Price is required';
-        } else if (isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
-            newErrors.price = 'Price must be a positive number';
+        if (!formData.title) {
+            newErrors.title = 'Title is required';
+            isValid = false;
         }
 
-        // Numeric validations
+        if (!formData.description) {
+            newErrors.description = 'Description is required';
+            isValid = false;
+        }
+
+        if (!formData.price) {
+            newErrors.price = 'Price is required';
+            isValid = false;
+        } else if (isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
+            newErrors.price = 'Price must be a positive number';
+            isValid = false;
+        }
+
+        if (!formData.location) {
+            newErrors.location = 'Location is required';
+            isValid = false;
+        }
+
+        if (!formData.contactEmail) {
+            newErrors.contactEmail = 'Email is required';
+            isValid = false;
+        } else if (!/\S+@\S+\.\S+/.test(formData.contactEmail)) {
+            newErrors.contactEmail = 'Email is invalid';
+            isValid = false;
+        }
+
+        // Optional fields with validation
         if (formData.bedrooms && (isNaN(Number(formData.bedrooms)) || Number(formData.bedrooms) < 0)) {
             newErrors.bedrooms = 'Bedrooms must be a non-negative number';
+            isValid = false;
         }
 
         if (formData.bathrooms && (isNaN(Number(formData.bathrooms)) || Number(formData.bathrooms) < 0)) {
             newErrors.bathrooms = 'Bathrooms must be a non-negative number';
+            isValid = false;
         }
 
         if (formData.area && (isNaN(Number(formData.area)) || Number(formData.area) <= 0)) {
             newErrors.area = 'Area must be a positive number';
+            isValid = false;
         }
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (formData.contactEmail && !emailRegex.test(formData.contactEmail)) {
-            newErrors.contactEmail = 'Invalid email format';
+        if (formData.imageUrl && !formData.imageUrl.startsWith('http')) {
+            newErrors.imageUrl = 'Image URL must start with http:// or https://';
+            isValid = false;
         }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return isValid;
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setSubmitError(null);
 
-        if (validateForm()) {
-            setSubmitting(true);
-            setSubmitError(null);
+        if (!validateForm()) return;
 
-            try {
-                // Prepare the data for API
-                const propertyData = {
-                    title: formData.title,
-                    description: formData.description,
-                    price: Number(formData.price),
-                    location: formData.location,
-                    bedrooms: formData.bedrooms ? Number(formData.bedrooms) : 0,
-                    bathrooms: formData.bathrooms ? Number(formData.bathrooms) : 0,
-                    area: formData.area ? Number(formData.area) : 0,
-                    imageUrl: formData.imageUrl,
-                    amenities: formData.amenities.split(',').map(item => item.trim()).filter(Boolean),
-                    contactEmail: formData.contactEmail,
-                    contactPhone: formData.contactPhone
-                };
+        try {
+            setLoading(true);
 
-                // Submit to API
-                await propertyApi.createProperty(propertyData);
+            // Convert form data to API format
+            const propertyData = {
+                title: formData.title,
+                description: formData.description,
+                price: Number(formData.price),
+                location: formData.location,
+                bedrooms: formData.bedrooms ? Number(formData.bedrooms) : undefined,
+                bathrooms: formData.bathrooms ? Number(formData.bathrooms) : undefined,
+                area: formData.area ? Number(formData.area) : undefined,
+                imageUrl: formData.imageUrl || undefined,
+                amenities: formData.amenities ? formData.amenities.split(',').map(item => item.trim()) : [],
+                contactEmail: formData.contactEmail,
+                contactPhone: formData.contactPhone || undefined
+            };
 
-                setFormSubmitted(true);
-                setSubmitting(false);
+            await propertyApi.createProperty(propertyData);
 
-                // Redirect after successful submission
-                setTimeout(() => {
-                    navigate('/');
-                }, 2000);
-            } catch (error) {
-                console.error('Error submitting property:', error);
-                setSubmitError('Failed to submit property. Please try again later.');
-                setSubmitting(false);
-            }
+            setSubmitSuccess(true);
+
+            // Reset form
+            setFormData(initialFormState);
+
+            // Redirect after a short delay
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
+
+        } catch (err) {
+            console.error('Error creating property:', err);
+            setSubmitError('Failed to create property. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -167,9 +182,9 @@ const AddPropertyPage: React.FC = () => {
                     Add New Property
                 </Typography>
 
-                {formSubmitted && (
+                {submitSuccess && (
                     <Alert severity="success" className="mb-4">
-                        Property submitted successfully! Redirecting to home page...
+                        Property successfully added! Redirecting to home page...
                     </Alert>
                 )}
 
@@ -199,7 +214,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.title}
                                 helperText={errors.title}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -214,7 +229,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.location}
                                 helperText={errors.location}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -231,7 +246,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.description}
                                 helperText={errors.description}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -248,7 +263,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.price}
                                 helperText={errors.price}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -264,7 +279,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.bedrooms}
                                 helperText={errors.bedrooms}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -280,7 +295,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.bathrooms}
                                 helperText={errors.bathrooms}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -296,7 +311,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.area}
                                 helperText={errors.area}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -310,7 +325,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.imageUrl}
                                 helperText={errors.imageUrl}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -323,7 +338,7 @@ const AddPropertyPage: React.FC = () => {
                                 placeholder="e.g. Parking, Pool, Gym"
                                 value={formData.amenities}
                                 onChange={handleChange}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -346,7 +361,7 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.contactEmail}
                                 helperText={errors.contactEmail}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
@@ -360,21 +375,32 @@ const AddPropertyPage: React.FC = () => {
                                 onChange={handleChange}
                                 error={!!errors.contactPhone}
                                 helperText={errors.contactPhone}
-                                disabled={submitting}
+                                disabled={loading}
                             />
                         </Grid>
 
                         <Grid item xs={12} className="mt-4">
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                fullWidth
-                                disabled={submitting}
-                            >
-                                {submitting ? <CircularProgress size={24} color="inherit" /> : 'Submit Property'}
-                            </Button>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => navigate('/')}
+                                    disabled={loading}
+                                >
+                                    Cancel
+                                </Button>
+
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    fullWidth
+                                    disabled={loading}
+                                    startIcon={loading ? <CircularProgress size={24} color="inherit" /> : null}
+                                >
+                                    {loading ? 'Submitting...' : 'Add Property'}
+                                </Button>
+                            </Box>
                         </Grid>
                     </Grid>
                 </form>
