@@ -5,91 +5,38 @@ import {
     Typography, Button, Box, Chip
 } from '@mui/material';
 import { Property } from '../types';
+import ImageWithFallback from './ImageWithFallback';
 
 interface PropertyCardProps {
     property: Property;
+    onClick?: () => void;
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick }) => {
     return (
-        <Card
-            sx={{
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: 6,
-                }
-            }}
+        <div
+            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform hover:scale-105"
+            onClick={onClick}
         >
-            <CardMedia
-                component="img"
-                height="200"
-                image={property.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}
-                alt={property.title}
-            />
-
-            <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" component="h2" gutterBottom noWrap>
-                    {property.title}
-                </Typography>
-
-                <Typography
-                    variant="subtitle1"
-                    color="primary"
-                    fontWeight="bold"
-                    gutterBottom
-                >
-                    ${property.price.toLocaleString()}
-                </Typography>
-
-                <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                >
-                    {property.location}
-                </Typography>
-
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                    <Typography variant="body2">
-                        {property.bedrooms} beds
-                    </Typography>
-                    <Typography variant="body2">
-                        {property.bathrooms} baths
-                    </Typography>
-                    <Typography variant="body2">
-                        {property.area} sq ft
-                    </Typography>
-                </Box>
-
-                <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                        display: '-webkit-box',
-                        overflow: 'hidden',
-                        WebkitBoxOrient: 'vertical',
-                        WebkitLineClamp: 2,
-                    }}
-                >
-                    {property.description}
-                </Typography>
-            </CardContent>
-
-            <CardActions sx={{ justifyContent: 'flex-end', p: 2, pt: 0 }}>
-                <Button
-                    component={Link}
-                    to={`/properties/${property.id}`}
-                    variant="contained"
-                    size="small"
-                >
-                    View Details
-                </Button>
-            </CardActions>
-        </Card>
+            <div className="h-48 overflow-hidden">
+                <ImageWithFallback
+                    src={property.imageUrl}
+                    alt={property.title}
+                    className="w-full h-full object-cover"
+                    fallbackSrc="/images/placeholder.svg"
+                />
+            </div>
+            <div className="p-4">
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">{property.title}</h3>
+                <p className="text-gray-600 mb-2">{property.location}</p>
+                <p className="text-gray-700 font-bold">${property.price.toLocaleString()}</p>
+                <div className="flex items-center mt-2 text-gray-500 text-sm">
+                    <span className="mr-3">{property.bedrooms} beds</span>
+                    <span className="mr-3">{property.bathrooms} baths</span>
+                    <span>{property.area} sqft</span>
+                </div>
+            </div>
+        </div>
     );
 };
 

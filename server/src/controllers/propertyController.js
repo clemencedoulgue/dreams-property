@@ -7,15 +7,15 @@ const mockProperties = [
         id: 1,
         title: 'Modern Downtown Apartment',
         description: 'A beautiful modern apartment in the heart of downtown with stunning city views.',
-        price: 350000,
+        price: 710000,
         location: 'Downtown, City Center',
         bedrooms: 2,
         bathrooms: 2,
         area: 1200,
         imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
         amenities: ['Parking', 'Gym', 'Swimming Pool', 'Security'],
-        contactEmail: 'contact@dreamsproperty.com',
-        contactPhone: '+1 (555) 123-4567',
+        contactEmail: 'koloaidem@gmail.com',
+        contactPhone: '+2 (555) 123-4567',
         createdAt: new Date().toISOString()
     },
     {
@@ -23,7 +23,7 @@ const mockProperties = [
         title: 'Suburban Family Home',
         description: 'Spacious family home in a quiet suburban neighborhood.',
         price: 550000,
-        location: 'Oakridge Suburb',
+        location: 'GHANA',
         bedrooms: 4,
         bathrooms: 3,
         area: 2500,
@@ -44,7 +44,7 @@ const propertySchema = Joi.object({
     bedrooms: Joi.number().integer().min(0),
     bathrooms: Joi.number().min(0),
     area: Joi.number().integer().min(0),
-    imageUrl: Joi.string().uri().allow(''),
+    imageUrl: Joi.string().allow(''),
     amenities: Joi.alternatives().try(
         Joi.string(),
         Joi.array().items(Joi.string())

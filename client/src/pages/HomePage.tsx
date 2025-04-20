@@ -1,65 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Grid, Container, Box, CircularProgress } from '@mui/material';
-import { propertyApi } from '../utils/api';
+import { mockProperties } from '../mockData';
 import PropertyCard from '../components/PropertyCard';
-import { Property } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
-    const [properties, setProperties] = useState<Property[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [properties, setProperties] = useState(mockProperties);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchProperties = async () => {
-            try {
-                setLoading(true);
-                const data = await propertyApi.getAllProperties();
-                setProperties(data);
-                setError(null);
-            } catch (err) {
-                console.error('Failed to fetch properties:', err);
-                setError('Failed to load properties. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
-        };
+        // Simulate API call
+        const timer = setTimeout(() => {
+            setProperties(mockProperties);
+            setLoading(false);
+        }, 500);
 
-        fetchProperties();
+        return () => clearTimeout(timer);
     }, []);
 
-    return (
-        <Container>
-            <Box sx={{ my: 4 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    Find Your Dream Property
-                </Typography>
-                <Typography variant="subtitle1" color="text.secondary" paragraph>
-                    Browse our selection of premium properties available for sale and rent
-                </Typography>
+    const handlePropertyClick = (id: number) => {
+        navigate(`/properties/${id}`);
+    };
 
-                {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-                        <CircularProgress />
-                    </Box>
-                ) : error ? (
-                    <Typography color="error">{error}</Typography>
-                ) : (
-                    <Grid container spacing={4} sx={{ mt: 2 }}>
-                        {properties.length > 0 ? (
-                            properties.map((property) => (
-                                <Grid item key={property.id} xs={12} sm={6} md={4}>
-                                    <PropertyCard property={property} />
-                                </Grid>
-                            ))
-                        ) : (
-                            <Grid item xs={12}>
-                                <Typography align="center">No properties found.</Typography>
-                            </Grid>
-                        )}
-                    </Grid>
-                )}
-            </Box>
-        </Container>
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading properties...</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">Find Your Dream Home</h1>
+                <p className="text-gray-600">Explore our selection of premium properties</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {properties.map((property) => (
+                    <PropertyCard
+                        key={property.id}
+                        property={property}
+                        onClick={() => handlePropertyClick(property.id)}
+                    />
+                ))}
+            </div>
+        </div>
     );
 };
 

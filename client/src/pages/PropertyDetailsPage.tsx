@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     Container,
@@ -22,14 +22,15 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import { mockProperties } from '../mockData';
 import { propertyApi } from '../utils/api';
 import { Property } from '../types';
+import ImageWithFallback from '../components/ImageWithFallback';
 
 const PropertyDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const [property, setProperty] = useState<Property | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [useLocalData, setUseLocalData] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPropertyDetails = async () => {
@@ -50,140 +51,114 @@ const PropertyDetailsPage: React.FC = () => {
         fetchPropertyDetails();
     }, [id]);
 
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
-                <CircularProgress />
-            </Box>
+            <div className="flex justify-center items-center h-64">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading property details...</p>
+                </div>
+            </div>
         );
     }
 
     if (error || !property) {
         return (
-            <Container sx={{ mt: 4 }}>
-                <Typography variant="h6" color="error">
-                    {error || 'Property not found'}
-                </Typography>
-                <Button
-                    variant="contained"
-                    onClick={() => navigate('/')}
-                    sx={{ mt: 2 }}
+            <div className="text-center p-8">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Property Not Found</h2>
+                <p className="text-gray-600 mb-6">The property you're looking for doesn't exist or has been removed.</p>
+                <button
+                    onClick={handleBack}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
                 >
-                    Back to listings
-                </Button>
-            </Container>
+                    Back to Properties
+                </button>
+            </div>
         );
     }
 
     return (
-        <Container sx={{ mt: 4, mb: 8 }}>
-            <Button
-                variant="outlined"
-                onClick={() => navigate('/')}
-                sx={{ mb: 4 }}
+        <div className="max-w-5xl mx-auto">
+            <button
+                onClick={handleBack}
+                className="flex items-center text-blue-500 hover:text-blue-700 mb-6"
             >
-                Back to listings
-            </Button>
+                <span>← Back to listings</span>
+            </button>
 
-            <Paper elevation={3} sx={{ overflow: 'hidden' }}>
-                {property.imageUrl && (
-                    <Box
-                        sx={{
-                            height: 400,
-                            backgroundImage: `url(${property.imageUrl})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }}
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div className="h-96 overflow-hidden">
+                    <ImageWithFallback
+                        src={property.imageUrl}
+                        alt={property.title}
+                        className="w-full h-full object-cover"
+                        fallbackSrc="/images/placeholder.svg"
                     />
-                )}
+                </div>
 
-                <Box sx={{ p: 4 }}>
-                    <Typography variant="h4" gutterBottom>
-                        {property.title}
-                    </Typography>
+                <div className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-800">{property.title}</h1>
+                            <p className="text-gray-600 text-lg">{property.location}</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-3xl font-bold text-blue-600">
+                                ${property.price.toLocaleString()}
+                            </p>
+                        </div>
+                    </div>
 
-                    <Typography
-                        variant="h5"
-                        color="primary"
-                        gutterBottom
-                        sx={{ fontWeight: 'bold' }}
-                    >
-                        ${property.price.toLocaleString()}
-                    </Typography>
+                    <div className="flex flex-wrap items-center gap-6 mb-6 text-gray-700">
+                        <div className="flex items-center">
+                            <span className="font-semibold">{property.bedrooms}</span>
+                            <span className="ml-1">beds</span>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="font-semibold">{property.bathrooms}</span>
+                            <span className="ml-1">baths</span>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="font-semibold">{property.area}</span>
+                            <span className="ml-1">sq ft</span>
+                        </div>
+                    </div>
 
-                    <Typography variant="subtitle1" sx={{ mb: 3 }}>
-                        {property.location}
-                    </Typography>
+                    <div className="mb-6">
+                        <h2 className="text-xl font-semibold mb-2 text-gray-800">Description</h2>
+                        <p className="text-gray-700 leading-relaxed">{property.description}</p>
+                    </div>
 
-                    <Grid container spacing={3} sx={{ mb: 4 }}>
-                        <Grid item xs={4}>
-                            <Typography variant="body2" color="text.secondary">
-                                Bedrooms
-                            </Typography>
-                            <Typography variant="h6">
-                                {property.bedrooms}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography variant="body2" color="text.secondary">
-                                Bathrooms
-                            </Typography>
-                            <Typography variant="h6">
-                                {property.bathrooms}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography variant="body2" color="text.secondary">
-                                Area
-                            </Typography>
-                            <Typography variant="h6">
-                                {property.area} sq ft
-                            </Typography>
-                        </Grid>
-                    </Grid>
+                    <div className="mb-6">
+                        <h2 className="text-xl font-semibold mb-2 text-gray-800">Amenities</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {property.amenities.map((amenity, index) => (
+                                <span
+                                    key={index}
+                                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                                >
+                                    {amenity}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
 
-                    <Divider sx={{ my: 3 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Description
-                    </Typography>
-                    <Typography variant="body1" paragraph>
-                        {property.description}
-                    </Typography>
-
-                    {property.amenities && property.amenities.length > 0 && (
-                        <>
-                            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                                Amenities
-                            </Typography>
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-                                {Array.isArray(property.amenities) ? (
-                                    property.amenities.map((amenity, index) => (
-                                        <Chip key={index} label={amenity} />
-                                    ))
-                                ) : (
-                                    <Typography>{property.amenities}</Typography>
-                                )}
-                            </Box>
-                        </>
-                    )}
-
-                    <Divider sx={{ my: 3 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Contact Information
-                    </Typography>
-                    <Typography variant="body1">
-                        Email: {property.contactEmail}
-                    </Typography>
-                    {property.contactPhone && (
-                        <Typography variant="body1">
-                            Phone: {property.contactPhone}
-                        </Typography>
-                    )}
-                </Box>
-            </Paper>
-        </Container>
+                    <div className="border-t pt-6">
+                        <h2 className="text-xl font-semibold mb-2 text-gray-800">Contact</h2>
+                        <p className="text-gray-700 mb-1">
+                            <span className="font-medium">Email:</span> {property.contactEmail}
+                        </p>
+                        <p className="text-gray-700">
+                            <span className="font-medium">Phone:</span> {property.contactPhone}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 

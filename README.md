@@ -46,7 +46,7 @@ Dreams Property is a web application that allows users to:
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/dreams-property.git
+git clone https://github.com/clemencedoulgue/dreams-property.git
 cd dreams-property
 ```
 
@@ -61,7 +61,7 @@ npm run install-all
 Create a MySQL database named `dreams_property`. Then, you can import the sample data:
 
 ```bash
-mysql -u YOUR_USERNAME -p < server/data.sql
+mysql -u Doulgue Clemence-p < server/data.sql
 ```
 
 Alternatively, the tables will be automatically created when the server starts, but they will be empty.
@@ -87,7 +87,7 @@ This will start the backend on port 5000 and the frontend on port 3000.
 
 6. **Access the application**
 
-Open your browser and navigate to `http://localhost:3000`
+Open your browser and navigate to `http://localhost:3006`
 
 ## Testing
 
@@ -111,7 +111,7 @@ Test the API using the Postman collection in `server/postman_collection.json` or
 3. Configure the service:
    - Build command: `cd server && npm install`
    - Start command: `cd server && npm start`
-   - Environment variables: Set up all required environment variables from `.env.example`
+   - Environment variables: Set up all required environment variables from `.env.`
 
 ## API Endpoints
 
@@ -138,4 +138,4 @@ MIT
 
 ## Author
 
-Your Name 
+Doulgue clemence Koloaide
