@@ -1,141 +1,161 @@
-# Dreams Property - Real Estate Listings Website
+# Dreams Property Listings
 
-A full-stack property listings website built with React, Node.js, Express, and MySQL.
+A full-stack property listings application allowing users to view, search, and add property listings.
 
-## Project Overview
+## 🌟 Features
 
-Dreams Property is a web application that allows users to:
+- Browse property listings with images, prices, and basic details
+- View detailed information about individual properties
+- Add new properties via a validated form
+- RESTful API with proper validation
+- Responsive design that works on desktop and mobile
 
-- Browse property listings
-- View detailed information about properties
-- Add new property listings
-- Contact property agents
-
-## Features
-
-- Responsive UI using React, Material UI, and Tailwind CSS
-- RESTful API with Node.js and Express
-- MySQL database integration
-- Form validation
-- Search functionality
-- Clean and modern UI design
-
-## Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
-- React (TypeScript)
-- Material UI
+- React (Create React App)
+- TypeScript
 - Tailwind CSS
-- React Router
+- Material UI components
+- React Router for navigation
 
 ### Backend
 - Node.js
-- Express
-- MySQL
-- Joi (validation)
-- CORS
+- Express.js
+- Joi for validation
+- RESTful API architecture
 
-## Installation & Setup
+### Database
+- MySQL (configured but running in demo mode with in-memory data)
+
+## 📋 Installation and Setup
 
 ### Prerequisites
-- Node.js (v14+)
-- MySQL
+- Node.js (v16.x or later)
+- npm (v7 or later)
+- Git
 
-### Local Development
-
-1. **Clone the repository**
-
+### Clone the Repository
 ```bash
-git clone https://github.com/clemencedoulgue/dreams-property.git
+git clone https://github.com/yourusername/dreams-property.git
 cd dreams-property
 ```
 
-2. **Install all dependencies**
+### Environment Setup
 
+#### Backend (.env file in server directory)
+```
+PORT=5004
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=dreams_property
+```
+
+#### Frontend (.env file in client directory)
+```
+REACT_APP_API_URL=http://localhost:5004/api
+PORT=3030
+```
+
+### Installation Steps
+
+1. Install dependencies for the root project, client, and server:
 ```bash
 npm run install-all
 ```
 
-3. **Set up the database**
-
-Create a MySQL database named `dreams_property`. Then, you can import the sample data:
-
-```bash
-mysql -u Doulgue Clemence-p < server/data.sql
-```
-
-Alternatively, the tables will be automatically created when the server starts, but they will be empty.
-
-4. **Configure environment variables**
-
-```bash
-cd server
-cp .env.example .env
-```
-
-Update the `.env` file with your database credentials.
-
-5. **Start both the frontend and backend**
-
-From the root directory:
-
+2. Start the development servers:
 ```bash
 npm start
 ```
 
-This will start the backend on port 5000 and the frontend on port 3000.
+This will start both the backend server (default port 5004) and the frontend development server (default port 3030).
 
-6. **Access the application**
+## 🚀 API Endpoints
 
-Open your browser and navigate to `http://localhost:3006`
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/properties | Get all properties |
+| GET | /api/properties/:id | Get a specific property by ID |
+| POST | /api/properties | Create a new property |
+| PUT | /api/properties/:id | Update an existing property |
+| DELETE | /api/properties/:id | Delete a property |
 
-## Testing
+### Sample Property Object
+```json
+{
+  "title": "Modern Downtown Apartment",
+  "description": "A beautiful modern apartment in the heart of downtown with stunning city views.",
+  "price": 710000,
+  "location": "Downtown, City Center",
+  "bedrooms": 2,
+  "bathrooms": 2,
+  "area": 1200,
+  "imageUrl": "/images/apartment1.jpg.svg",
+  "amenities": ["Parking", "Gym", "Swimming Pool", "Security"],
+  "contactEmail": "contact@dreamsproperty.com",
+  "contactPhone": "+1 (555) 123-4567"
+}
+```
 
-Test the API using the Postman collection in `server/postman_collection.json` or using the test instructions in `server/test.js`.
+## 🧪 Testing
 
-## Deployment
+### Manual Test Cases
 
-### Frontend Deployment (Vercel/Netlify)
+1. **Property Listing Display Test**
+   - Navigate to the home page
+   - Verify that property listings appear with images, titles, prices, and location
+   - Expected: All properties display correctly with their details
 
-1. Create an account on Vercel or Netlify
-2. Connect your GitHub repository
-3. Configure build settings:
-   - Build command: `cd client && npm install && npm run build`
-   - Output directory: `client/build`
-   - Environment variables: Set up the backend API URL
+2. **Property Detail Navigation Test**
+   - Click on a property card
+   - Verify that you are redirected to the property details page
+   - Expected: Property details page shows complete information about the selected property
 
-### Backend Deployment (Render/Railway)
+3. **Add Property Form Validation Test**
+   - Navigate to the "Add Property" page
+   - Submit the form without filling required fields
+   - Expected: Form shows validation errors and prevents submission
 
-1. Create an account on Render or Railway
-2. Connect your GitHub repository
-3. Configure the service:
-   - Build command: `cd server && npm install`
-   - Start command: `cd server && npm start`
-   - Environment variables: Set up all required environment variables from `.env.`
+4. **API Response Test**
+   - Send a GET request to /api/properties
+   - Expected: Receive a JSON array of property objects with status 200
 
-## API Endpoints
+5. **Image Loading Test**
+   - Navigate to the home page
+   - Inspect network activity
+   - Expected: SVG images load quickly and correctly
 
-- `GET /api/properties` - Get all properties
-- `GET /api/properties/:id` - Get property by ID
-- `POST /api/properties` - Create a new property
-- `PUT /api/properties/:id` - Update property by ID
-- `DELETE /api/properties/:id` - Delete property by ID
+### Failed Test Cases (With Solutions)
 
-## Future Enhancements
+1. **Image URL Validation Issue**
+   - Problem: When submitting a property with a relative image path, the API returned a validation error: `"imageUrl" must be a valid uri`
+   - Solution: Modified the Joi validation schema to accept relative paths by changing `Joi.string().uri().allow('')` to `Joi.string().allow('')`
 
-- User authentication and authorization
-- Image upload functionality
-- Property reviews and ratings
-- Advanced search filters
-- Booking/inquiry system
-- Admin dashboard
-- Property favorites
-- Payment integration for premium listings
+2. **Port Conflict Issue**
+   - Problem: Default port 3000 was already in use, causing server startup failures
+   - Solution: Implemented dynamic port selection with fallback options and configured PORT in environment variables
 
-## License
+## 📱 Deployment
 
+### Frontend Deployment (Netlify)
+1. Configure netlify.toml file (already included)
+2. Connect repository to Netlify
+3. Set environment variables in Netlify dashboard
+
+### Backend Deployment (Render)
+1. Configure render.yaml file (already included)
+2. Connect repository to Render
+3. Set environment variables in Render dashboard
+
+## 🔍 Future Improvements
+
+1. Implement user authentication and property favoriting
+2. Add advanced search and filtering functionality
+3. Integrate with a real database system
+4. Add image upload functionality
+5. Implement unit and integration tests
+
+## 📄 License
 MIT
-
-## Author
-
-Doulgue clemence Koloaide
