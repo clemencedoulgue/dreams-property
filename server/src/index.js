@@ -21,6 +21,11 @@ app.get('/', (req, res) => {
     res.send('Dreams Property API is running');
 });
 
+// Add /api route handler to improve usability
+app.get('/api', (req, res) => {
+    res.json({ message: 'Welcome to Dreams Property API. Use /api/properties to access property data.' });
+});
+
 // Function to try starting the server on different ports
 function startServer(initialPort, maxAttempts = 5) {
     let currentPort = initialPort;
