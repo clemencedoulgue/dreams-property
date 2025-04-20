@@ -1,16 +1,19 @@
 services:
   # Frontend service
-  - type: web
+  - type: static
     name: dreams-property-client
-    runtime: static
     rootDir: client
     buildCommand: npm install && npm run build
-    staticPublishPath: ./build
+    publishDir: build
     envVars:
       - key: REACT_APP_API_URL
         value: https://dreams-property-server.onrender.com/api
       - key: NODE_VERSION
         value: 16.20.0
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
     routes:
       - type: rewrite
         source: /*
