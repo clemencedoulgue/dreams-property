@@ -143,11 +143,13 @@ This will start both the backend server (default port 5004) and the frontend dev
 1. Configure netlify.toml file (already included)
 2. Connect repository to Netlify
 3. Set environment variables in Netlify dashboard
+4. Live URL: https://dreams-property-client.netlify.app
 
 ### Backend Deployment (Render)
 1. Configure render.yaml file (already included)
 2. Connect repository to Render
 3. Set environment variables in Render dashboard
+4. Live URL: https://dreams-property-server.onrender.com
 
 ## 🔍 Future Improvements
 
