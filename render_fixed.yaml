@@ -1,0 +1,42 @@
+services:
+  # Frontend service
+  - type: static
+    name: dreams-property-client
+    rootDir: client
+    buildCommand: npm install && npm run build
+    publishDir: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://dreams-property-server.onrender.com/api
+      - key: NODE_VERSION
+        value: 16.20.0
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+  
+  # Backend service
+  - type: web
+    name: dreams-property-server
+    rootDir: server
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/index.js
+    envVars:
+      - key: PORT
+        value: 6000
+      - key: DB_HOST
+        value: localhost
+      - key: DB_USER
+        value: root
+      - key: DB_PASSWORD
+        value: ""
+      - key: DB_NAME
+        value: dreams_property
+      - key: NODE_VERSION
+        value: 16.20.0
