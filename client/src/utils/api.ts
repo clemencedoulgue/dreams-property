@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Property } from '../types';
 
 // Base API URL - change this to your production backend URL when deploying
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5006/api';
 
 // Create axios instance
 const api = axios.create({
@@ -10,7 +10,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 10000, // 72 hours timeout
+    timeout: 10000, // 10 seconds timeout
 });
 
 // Add response interceptor for error handling
