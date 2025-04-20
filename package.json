@@ -10,7 +10,11 @@
         "build": "npm run install-client && cd client && npm run build",
         "install-client": "cd client && npm install",
         "install-server": "cd server && npm install",
-        "test": "cd client && npm test"
+        "test": "cd client && npm test",
+        "postinstall": "npm run install-client && npm run install-server"
+    },
+    "engines": {
+        "node": "16.x"
     },
     "devDependencies": {
         "concurrently": "^7.6.0"

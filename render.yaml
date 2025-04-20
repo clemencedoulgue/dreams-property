@@ -9,6 +9,8 @@ services:
     envVars:
       - key: REACT_APP_API_URL
         value: https://dreams-property-server.onrender.com/api
+      - key: NODE_VERSION
+        value: 16.20.0
     routes:
       - type: rewrite
         source: /*
@@ -32,4 +34,6 @@ services:
       - key: DB_PASSWORD
         value: ""
       - key: DB_NAME
-        value: dreams_property 
+        value: dreams_property
+      - key: NODE_VERSION
+        value: 16.20.0 
