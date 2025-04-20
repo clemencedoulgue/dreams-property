@@ -1,18 +1,27 @@
 const mysql = require('mysql2/promise');
 
 // Create a connection pool to MySQL
-const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'dreams_property',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
+let pool;
+
+try {
+    pool = mysql.createPool({
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'dreams_property',
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0
+    });
+} catch (error) {
+    console.error('Error creating connection pool:', error.message);
+    console.log('App will continue to run in demo mode.');
+}
 
 // Test database connection
 async function testConnection() {
+    if (!pool) return false;
+
     try {
         const connection = await pool.getConnection();
         console.log('Database connection established successfully.');
@@ -27,6 +36,8 @@ async function testConnection() {
 
 // Initialize database with tables if they don't exist
 async function initDatabase() {
+    if (!pool) return false;
+
     try {
         const connection = await pool.getConnection();
 
@@ -62,6 +73,11 @@ async function initDatabase() {
 // Set up database but don't fail if it's not available
 async function setup() {
     try {
+        if (!pool) {
+            console.log('Database connection pool not created. Using fallback data.');
+            return;
+        }
+
         await testConnection();
         await initDatabase();
     } catch (err) {
@@ -72,4 +88,10 @@ async function setup() {
 // Call setup but don't wait for it to complete
 setup();
 
-module.exports = pool; 
+module.exports = pool || {
+    // Mock pool with empty query function for fallback
+    query: async () => [[], {}],
+    getConnection: async () => {
+        throw new Error('Database not available');
+    }
+}; 

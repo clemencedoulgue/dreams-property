@@ -10,7 +10,27 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    timeout: 10000, // 10 seconds timeout
 });
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+    response => response,
+    error => {
+        console.error('API Error:', error.message);
+
+        // Customize error message based on the error
+        if (error.code === 'ECONNABORTED') {
+            error.customMessage = 'Request timed out. Please try again.';
+        } else if (!error.response) {
+            error.customMessage = 'Network error. Please check your connection.';
+        } else if (error.response.status >= 500) {
+            error.customMessage = 'Server error. Please try again later.';
+        }
+
+        return Promise.reject(error);
+    }
+);
 
 // API functions for properties
 export const propertyApi = {

@@ -54,7 +54,7 @@ const propertySchema = Joi.object({
 });
 
 // Check if database is available or use mock data
-let useDatabase = true;
+let useDatabase = false; // Set to false by default to ensure demo mode works
 try {
     // Simple test
     if (!Property) {
