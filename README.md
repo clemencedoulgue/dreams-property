@@ -37,7 +37,7 @@ A full-stack property listings application allowing users to view, search, and a
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/yourusername/dreams-property.git
+git clone https://github.com/clemencedoulgue/dreams-property.git
 cd dreams-property
 ```
 
