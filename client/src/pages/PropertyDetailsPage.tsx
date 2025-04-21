@@ -38,7 +38,9 @@ const PropertyDetailsPage: React.FC = () => {
 
             try {
                 setLoading(true);
+                console.log(`PropertyDetailsPage - Fetching property with ID: ${id}`);
                 const data = await propertyApi.getPropertyById(Number(id));
+                console.log('PropertyDetailsPage - Received property data:', data);
                 setProperty(data);
             } catch (err) {
                 console.error(`Failed to fetch property ${id}:`, err);
@@ -55,6 +57,26 @@ const PropertyDetailsPage: React.FC = () => {
         navigate(-1);
     };
 
+    // Ensure we have safe property data with fallbacks for undefined values
+    const safeProperty = property ? {
+        ...property,
+        imageUrl: property.imageUrl || '',
+        title: property.title || 'Property Details',
+        description: property.description || 'No description available',
+        location: property.location || 'Location not specified',
+        amenities: property.amenities || []
+    } : null;
+
+    // Log the safe property data before rendering
+    useEffect(() => {
+        if (safeProperty) {
+            console.log('PropertyDetailsPage - Using safe property data:', {
+                title: safeProperty.title,
+                imageUrl: safeProperty.imageUrl || 'Using fallback image'
+            });
+        }
+    }, [safeProperty]);
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -66,7 +88,7 @@ const PropertyDetailsPage: React.FC = () => {
         );
     }
 
-    if (error || !property) {
+    if (error || !safeProperty) {
         return (
             <div className="text-center p-8">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Property Not Found</h2>
@@ -93,8 +115,8 @@ const PropertyDetailsPage: React.FC = () => {
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="h-96 overflow-hidden">
                     <ImageWithFallback
-                        src={property.imageUrl}
-                        alt={property.title}
+                        src={safeProperty.imageUrl}
+                        alt={safeProperty.title}
                         className="w-full h-full object-cover"
                         fallbackSrc="/images/placeholder.svg"
                     />
@@ -103,40 +125,40 @@ const PropertyDetailsPage: React.FC = () => {
                 <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-800">{property.title}</h1>
-                            <p className="text-gray-600 text-lg">{property.location}</p>
+                            <h1 className="text-3xl font-bold text-gray-800">{safeProperty.title}</h1>
+                            <p className="text-gray-600 text-lg">{safeProperty.location}</p>
                         </div>
                         <div className="text-right">
                             <p className="text-3xl font-bold text-blue-600">
-                                ${property.price.toLocaleString()}
+                                ${safeProperty.price.toLocaleString()}
                             </p>
                         </div>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-6 mb-6 text-gray-700">
                         <div className="flex items-center">
-                            <span className="font-semibold">{property.bedrooms}</span>
+                            <span className="font-semibold">{safeProperty.bedrooms}</span>
                             <span className="ml-1">beds</span>
                         </div>
                         <div className="flex items-center">
-                            <span className="font-semibold">{property.bathrooms}</span>
+                            <span className="font-semibold">{safeProperty.bathrooms}</span>
                             <span className="ml-1">baths</span>
                         </div>
                         <div className="flex items-center">
-                            <span className="font-semibold">{property.area}</span>
+                            <span className="font-semibold">{safeProperty.area}</span>
                             <span className="ml-1">sq ft</span>
                         </div>
                     </div>
 
                     <div className="mb-6">
                         <h2 className="text-xl font-semibold mb-2 text-gray-800">Description</h2>
-                        <p className="text-gray-700 leading-relaxed">{property.description}</p>
+                        <p className="text-gray-700 leading-relaxed">{safeProperty.description}</p>
                     </div>
 
                     <div className="mb-6">
                         <h2 className="text-xl font-semibold mb-2 text-gray-800">Amenities</h2>
                         <div className="flex flex-wrap gap-2">
-                            {property.amenities.map((amenity, index) => (
+                            {safeProperty.amenities.map((amenity, index) => (
                                 <span
                                     key={index}
                                     className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
@@ -150,10 +172,10 @@ const PropertyDetailsPage: React.FC = () => {
                     <div className="border-t pt-6">
                         <h2 className="text-xl font-semibold mb-2 text-gray-800">Contact</h2>
                         <p className="text-gray-700 mb-1">
-                            <span className="font-medium">Email:</span> {property.contactEmail}
+                            <span className="font-medium">Email:</span> {safeProperty.contactEmail}
                         </p>
                         <p className="text-gray-700">
-                            <span className="font-medium">Phone:</span> {property.contactPhone}
+                            <span className="font-medium">Phone:</span> {safeProperty.contactPhone}
                         </p>
                     </div>
                 </div>

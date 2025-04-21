@@ -2,7 +2,9 @@ import axios from 'axios';
 import { Property } from '../types';
 
 // Base API URL - change this to your production backend URL when deploying
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5006/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5004/api';
+
+console.log('API URL:', API_URL);
 
 // Create axios instance
 const api = axios.create({
@@ -15,9 +17,20 @@ const api = axios.create({
 
 // Add response interceptor for error handling
 api.interceptors.response.use(
-    response => response,
+    response => {
+        console.log(`API Response from ${response.config.url}:`, {
+            status: response.status,
+            statusText: response.statusText,
+            dataType: typeof response.data
+        });
+        return response;
+    },
     error => {
-        console.error('API Error:', error.message);
+        console.error('API Error:', {
+            message: error.message,
+            url: error.config?.url,
+            method: error.config?.method
+        });
 
         // Customize error message based on the error
         if (error.code === 'ECONNABORTED') {
@@ -32,13 +45,37 @@ api.interceptors.response.use(
     }
 );
 
+// Helper to validate and fix property data
+const validatePropertyData = (property: Property): Property => {
+    // Log for debugging
+    console.log('Validating property data:', {
+        id: property.id,
+        hasImage: !!property.imageUrl,
+        imageUrl: property.imageUrl
+    });
+
+    // Fix missing or invalid image URLs
+    if (!property.imageUrl) {
+        console.log(`Adding fallback image URL for property ${property.id}`);
+        property.imageUrl = '/images/placeholder.svg';
+    }
+
+    return property;
+};
+
 // API functions for properties
 export const propertyApi = {
     // Get all properties
     getAllProperties: async (): Promise<Property[]> => {
         try {
+            console.log('Fetching all properties...');
             const response = await api.get('/properties');
-            return response.data;
+
+            // Validate each property in the array
+            const validatedProperties = response.data.map(validatePropertyData);
+            console.log(`Received ${validatedProperties.length} properties`);
+
+            return validatedProperties;
         } catch (error) {
             console.error('Error fetching properties:', error);
             throw error;
@@ -48,8 +85,17 @@ export const propertyApi = {
     // Get property by ID
     getPropertyById: async (id: number): Promise<Property> => {
         try {
+            console.log(`Fetching property ${id}...`);
             const response = await api.get(`/properties/${id}`);
-            return response.data;
+
+            // Validate and fix the property data
+            const validatedProperty = validatePropertyData(response.data);
+            console.log(`Property ${id} data validated:`, {
+                title: validatedProperty.title,
+                hasImage: !!validatedProperty.imageUrl
+            });
+
+            return validatedProperty;
         } catch (error) {
             console.error(`Error fetching property ${id}:`, error);
             throw error;
