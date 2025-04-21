@@ -48,7 +48,7 @@ cd dreams-property
 PORT=5004
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=your_password
+DB_PASSWORD=your_db_password
 DB_NAME=dreams_property
 ```
 
@@ -139,17 +139,21 @@ This will start both the backend server (default port 5004) and the frontend dev
 
 ## 📱 Deployment
 
-### Frontend Deployment (Netlify)
-1. Configure netlify.toml file (already included)
-2. Connect repository to Netlify
-3. Set environment variables in Netlify dashboard
-4. Live URL: https://dreams-property-client.netlify.app
+### Frontend Deployment (Vercel)
+1. Connect your GitHub repository to Vercel
+2. Set the root directory to "client"
+3. Set the build command to "npm run build"
+4. Set the output directory to "build"
+5. Add environment variables in Vercel dashboard:
+   - REACT_APP_API_URL=https://dreams-property-server.onrender.com/api
 
 ### Backend Deployment (Render)
-1. Configure render.yaml file (already included)
-2. Connect repository to Render
-3. Set environment variables in Render dashboard
-4. Live URL: https://dreams-property-server.onrender.com
+1. Connect your GitHub repository to Render
+2. Create a Web Service with the following settings:
+   - Root Directory: server
+   - Build Command: npm install
+   - Start Command: node src/index.js
+3. Add environment variables in Render dashboard
 
 ## 🔍 Future Improvements
 

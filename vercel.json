@@ -1,0 +1,15 @@
+{
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ],
+    "buildCommand": "cd client && npm install && npm run build",
+    "outputDirectory": "client/build",
+    "framework": "create-react-app",
+    "installCommand": "cd client && npm install",
+    "env": {
+        "REACT_APP_API_URL": "https://dreams-property-server.onrender.com/api"
+    }
+}
