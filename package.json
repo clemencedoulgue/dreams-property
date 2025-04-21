@@ -12,7 +12,8 @@
         "install-server": "cd server && npm install",
         "test": "cd client && npm test",
         "postinstall": "npm run install-client && npm run install-server",
-        "install-cross-env": "npm install cross-env --save-dev && cd client && npm install cross-env --save-dev"
+        "install-cross-env": "npm install cross-env --save-dev && cd client && npm install cross-env --save-dev",
+        "vercel-build": "cd client && npm install && npm run build"
     },
     "engines": {
         "node": "16.x"

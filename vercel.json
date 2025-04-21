@@ -5,20 +5,10 @@
             "destination": "/index.html"
         }
     ],
-    "buildCommand": "cd client && npm install && npm run build",
+    "buildCommand": "npm run vercel-build",
     "outputDirectory": "client/build",
     "framework": "create-react-app",
-    "installCommand": "cd client && npm install",
     "env": {
         "REACT_APP_API_URL": "https://dreams-property-server.onrender.com/api"
-    },
-    "builds": [
-        {
-            "src": "client/package.json",
-            "use": "@vercel/node",
-            "config": {
-                "packageManager": "npm"
-            }
-        }
-    ]
+    }
 }
