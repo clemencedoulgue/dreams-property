@@ -29,12 +29,12 @@ services:
     startCommand: node src/index.js
     envVars:
       - key: PORT
-        value: 5000
+        value: 5006
       - key: DB_HOST
         value: localhost
       - key: DB_USER
         value: root
-      - key: DB_PASSWORD
+      - key: msm103uhnaz
         value: ""
       - key: DB_NAME
         value: dreams_property

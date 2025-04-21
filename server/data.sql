@@ -36,20 +36,20 @@ INSERT INTO properties (
   contact_phone
 ) VALUES 
 (
-  'Modern Downtown Apartment',
+  'Modern  Apartment',
   'A beautiful modern apartment in the heart of downtown with stunning city views. Features include hardwood floors, stainless steel appliances, and a private balcony.',
   350000.00,
-  'Downtown, City Center',
+  'Acrra, City Center',
   2,
   2.0,
   1200,
   'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
   'Parking,Gym,Swimming Pool,Security',
-  'contact@dreamsproperty.com',
+  'maame@dreamsproperty.com',
   '+1 (555) 123-4567'
 ),
 (
-  'Suburban Family Home',
+  'Dreams Home',
   'Spacious family home in a quiet suburban neighborhood. Perfect for raising a family with a large backyard, modern kitchen, and close to excellent schools.',
   550000.00,
   'Oakridge Suburb',

@@ -59,10 +59,10 @@
  * Example test execution with curl:
  * 
  * Test Case 1:
- * curl http://localhost:5000/api/properties
+ * curl http://localhost:5006/api/properties
  * 
  * Test Case 2:
- * curl http://localhost:5000/api/properties/1
+ * curl http://localhost:5006/api/properties/1
  * 
  * Test Case 3:
  * curl -X POST -H "Content-Type: application/json" -d '{
@@ -75,7 +75,7 @@
  *   "area": 1500,
  *   "amenities": ["Test Amenity"],
  *   "contactEmail": "test@example.com"
- * }' http://localhost:5000/api/properties
+ * }' http://localhost:5006/api/properties
  * 
  * Test Case 4:
  * curl -X PUT -H "Content-Type: application/json" -d '{
@@ -88,10 +88,10 @@
  *   "area": 1500,
  *   "amenities": ["Test Amenity", "New Amenity"],
  *   "contactEmail": "test@example.com"
- * }' http://localhost:5000/api/properties/1
+ * }' http://localhost:5006/api/properties/1
  * 
  * Test Case 5:
- * curl -X DELETE http://localhost:5000/api/properties/1
+ * curl -X DELETE http://localhost:5006/api/properties/1
  * 
  * Test Case 6 (EXPECTED TO FAIL):
  * curl -X POST -H "Content-Type: application/json" -d '{
@@ -99,8 +99,8 @@
  *   "description": "Short",
  *   "price": -100,
  *   "contactEmail": "invalid-email"
- * }' http://localhost:5000/api/properties
+ * }' http://localhost:5006/api/properties
  * 
  * Test Case 7 (EXPECTED TO FAIL):
- * curl http://localhost:5000/api/properties/999
+ * curl http://localhost:5006/api/properties/999
  */ 

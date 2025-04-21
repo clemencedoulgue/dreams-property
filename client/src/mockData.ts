@@ -43,7 +43,7 @@ export const mockProperties: Property[] = [
         imageUrl: '/images/villa1.jpg.svg',
         amenities: ['Private Pool', 'Beach Access', 'Home Theater', 'Wine Cellar', 'Smart Home'],
         contactEmail: 'luxury@dreamsproperty.com',
-        contactPhone: '+1 (555) 987-6543',
+        contactPhone: '+41 (555) 987-6543',
         createdAt: '2023-03-10T09:45:00',
     },
 ]; 

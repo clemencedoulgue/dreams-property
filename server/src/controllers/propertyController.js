@@ -5,10 +5,10 @@ const Joi = require('joi');
 const mockProperties = [
     {
         id: 1,
-        title: 'Modern Downtown Apartment',
+        title: 'Modern Apartment',
         description: 'A beautiful modern apartment in the heart of downtown with stunning city views.',
         price: 710000,
-        location: 'Downtown, City Center',
+        location: 'Accra, City Center',
         bedrooms: 2,
         bathrooms: 2,
         area: 1200,
@@ -20,7 +20,7 @@ const mockProperties = [
     },
     {
         id: 2,
-        title: 'Suburban Family Home',
+        title: 'Dreams Home',
         description: 'Spacious family home in a quiet suburban neighborhood.',
         price: 550000,
         location: 'GHANA',
@@ -29,8 +29,8 @@ const mockProperties = [
         area: 2500,
         imageUrl: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233',
         amenities: ['Garden', 'Garage', 'Fireplace', 'Central Heating/AC'],
-        contactEmail: 'contact@dreamsproperty.com',
-        contactPhone: '+1 (555) 123-4567',
+        contactEmail: 'maame@dreamsproperty.com',
+        contactPhone: '+233 (555) 123-4567',
         createdAt: new Date().toISOString()
     }
 ];

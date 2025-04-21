@@ -6,7 +6,7 @@ const db = require('./config/database');
 const http = require('http');
 
 const app = express();
-const startPort = process.env.PORT || 5000;
+const startPort = process.env.PORT || 5006;
 let port = startPort;
 
 // Middleware
