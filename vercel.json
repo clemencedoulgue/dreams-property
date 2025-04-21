@@ -11,5 +11,14 @@
     "installCommand": "cd client && npm install",
     "env": {
         "REACT_APP_API_URL": "https://dreams-property-server.onrender.com/api"
-    }
+    },
+    "builds": [
+        {
+            "src": "client/package.json",
+            "use": "@vercel/node",
+            "config": {
+                "packageManager": "npm"
+            }
+        }
+    ]
 }
